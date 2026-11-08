@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Cache Components sengaja dimatikan: hampir semua halaman bergantung pada user yang login.
   turbopack: {
     rules: {
       "*.css": {
