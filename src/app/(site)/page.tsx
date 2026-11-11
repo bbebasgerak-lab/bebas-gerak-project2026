@@ -103,7 +103,7 @@ export default async function Home() {
       </section>
 
       <AppShowcase
-        text={{ name: c.nama, label: c.tampilan_label, title1: c.tampilan_judul_1, title2: c.tampilan_judul_2, text: c.tampilan_teks }}
+        text={{ name: c.nama, hero: `${c.hero_judul_1} ${c.hero_judul_2}`, label: c.tampilan_label, title1: c.tampilan_judul_1, title2: c.tampilan_judul_2, text: c.tampilan_teks }}
         programs={programs.slice(0, 3).map((p) => ({ title: p.title, level: p.level, price: rupiah(p.price) }))} />
 
       {preview && (

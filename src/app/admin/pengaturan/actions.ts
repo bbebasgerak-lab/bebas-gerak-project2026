@@ -23,7 +23,7 @@ export async function saveContent(fd: FormData) {
   await requireAdmin();
   const data: Record<string, unknown> = {};
   for (const f of allFields) {
-    let v = String(fd.get(f.key) ?? "").trim();
+    let v = String(fd.get(f.key) ?? "").replace(/\r\n/g, "\n").trim(); // browser mengirim baris baru sebagai \r\n
     if (f.key === "whatsapp" && v) {
       v = v.replace(/\D/g, "").replace(/^0/, "62"); // "0812-3456…" atau "+62 812…" → "62812…"
       if (!/^\d{8,15}$/.test(v)) return { error: "Nomor WhatsApp tidak dikenali. Contoh: 6281234567890" };
@@ -33,7 +33,7 @@ export async function saveContent(fd: FormData) {
     data[f.key] = v;
   }
 
-  const answers = fd.getAll("faq_a").map((a) => String(a).trim());
+  const answers = fd.getAll("faq_a").map((a) => String(a).replace(/\r\n/g, "\n").trim());
   const faq = fd.getAll("faq_q").map((q, i) => ({ q: String(q).trim(), a: answers[i] ?? "" })).filter((x) => x.q || x.a);
   const half = faq.findIndex((x) => !x.q || !x.a);
   if (half >= 0) return { error: `Tanya jawab nomor ${half + 1} belum lengkap. Isi pertanyaan dan jawabannya, atau hapus.` };

@@ -28,8 +28,9 @@ const CAPTIONS = [
   ["Latihan saya", "Semua program Anda tersimpan di satu tempat."],
 ] as const;
 
-export type ShowcaseText = { name: string; label: string; title1: string; title2: string; text: string };
-const BrandName = createContext("");
+// `name` dan `hero` ikut tampil di dalam gambar HP, supaya contohnya sama dengan web yang asli.
+export type ShowcaseText = { name: string; hero: string; label: string; title1: string; title2: string; text: string };
+const Brand = createContext({ name: "", hero: "" });
 
 export function AppShowcase({ programs, text }: { programs: ShowcaseProgram[]; text: ShowcaseText }) {
   const list = programs.length ? programs : SAMPLE;
@@ -41,7 +42,7 @@ export function AppShowcase({ programs, text }: { programs: ShowcaseProgram[]; t
   ];
 
   return (
-    <BrandName value={text.name}>
+    <Brand value={{ name: text.name, hero: text.hero }}>
     <section className="overflow-hidden py-16 md:py-20" aria-labelledby="tampilan-judul">
       <div className="mx-auto max-w-6xl px-4 text-center">
         <p className="eyebrow mb-6">{text.label}</p>
@@ -77,7 +78,7 @@ export function AppShowcase({ programs, text }: { programs: ShowcaseProgram[]; t
       {/* ===== Versi HP & tablet ===== */}
       <MobileCarousel screens={screens} />
     </section>
-    </BrandName>
+    </Brand>
   );
 }
 
@@ -196,7 +197,7 @@ function MiniButton({ children, light, className }: { children: ReactNode; light
 }
 
 function MiniHeader({ title, dark, back }: { title?: string; dark?: boolean; back?: boolean }) {
-  const brand = useContext(BrandName);
+  const brand = useContext(Brand).name;
   return (
     <div className="flex items-center justify-between px-4 py-2">
       {back ? (
@@ -220,12 +221,13 @@ function MiniHeader({ title, dark, back }: { title?: string; dark?: boolean; bac
 /* ---------- Isi layar ---------- */
 
 function HomeScreen() {
+  const { hero } = useContext(Brand);
   return (
     <div className="h-full bg-[#eeefe9] text-[#131313]">
       <StatusBar />
       <MiniHeader />
       <p className="mt-3 px-4 text-center font-heading text-[25px] leading-[1] italic">
-        Tubuh Lebih Kuat, Langkah Lebih Mantap
+        {hero}
       </p>
       <div className="mt-3 text-center">
         <MiniPill>Senam kursi usia 50+</MiniPill>

@@ -10,9 +10,10 @@ import type { Faq } from "@/lib/content-fields";
 import { saveContent, uploadImage } from "./actions";
 
 // Tidak memakai <form action>: React mengosongkan ulang form setelah action selesai, jadi kalau ada satu
-// kolom yang salah, semua ketikan admin ikut hilang. Di sini isian dipertahankan saat gagal, dan
-// dimuat ulang dari isi tersimpan (lewat `key`) saat berhasil.
-export function SettingsForm({ children }: { children: ReactNode }) {
+// kolom yang salah, semua ketikan admin ikut hilang. Di sini isian dipertahankan saat gagal.
+// Saat berhasil, semua kolom dipasang ulang (lewat `key`) supaya menampilkan isi yang benar-benar tersimpan:
+// `saved` berubah begitu data baru dari server tiba, `version` menangani simpan yang isinya tidak berubah.
+export function SettingsForm({ saved, children }: { saved: string; children: ReactNode }) {
   const [pending, start] = useTransition();
   const [version, setVersion] = useState(0);
   return (
@@ -31,7 +32,7 @@ export function SettingsForm({ children }: { children: ReactNode }) {
         });
       }}
     >
-      <fieldset key={version} disabled={pending} className="contents">{children}</fieldset>
+      <fieldset key={`${version}:${saved}`} disabled={pending} className="contents">{children}</fieldset>
     </form>
   );
 }

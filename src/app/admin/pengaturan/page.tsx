@@ -41,7 +41,7 @@ export default async function SettingsPage() {
           <a key={href} href={href} className="rounded-full border bg-card px-4 py-2 text-sm font-bold hover:bg-muted">{title}</a>
         ))}
       </nav>
-      <SettingsForm>
+      <SettingsForm saved={JSON.stringify(c)}>
         {groups.map((g, i) => (
           <section key={g.title} id={`bagian-${i}`} className={sectionClass}>
             <div className="space-y-1">
