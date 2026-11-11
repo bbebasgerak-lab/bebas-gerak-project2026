@@ -1,0 +1,8 @@
+# Jangan pernah unggah file rahasia & hasil build lokal ke Vercel.
+# Kunci-kunci diisi lewat Environment Variables di dashboard/CLI Vercel.
+.env*
+!.env.example
+.clerk
+.claude
+.next
+node_modules

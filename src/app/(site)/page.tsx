@@ -1,102 +1,100 @@
 import Link from "next/link";
-import { Armchair, Footprints, HeartHandshake, MonitorPlay, MousePointerClick, Wallet } from "lucide-react";
+import { MonitorPlay, MousePointerClick, Wallet } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { HeroArt } from "@/components/hero-art";
+import { SiteImage } from "@/components/site-image";
 import { ProgramCard } from "@/components/program-card";
 import { VideoFrame } from "@/components/video-frame";
-import { firstPreview, publishedPrograms } from "@/lib/data";
+import { AppShowcase } from "@/components/app-showcase";
+import { firstPreview, publishedPrograms, rupiah } from "@/lib/data";
 import { playbackUrl } from "@/lib/video";
-import { site } from "@/lib/site";
+import { getContent } from "@/lib/content";
 
-const faq = [
-  ["Apakah aman untuk lutut dan punggung?", "Hampir semua gerakan dilakukan sambil duduk atau berpegangan pada kursi. Ada pilihan gerakan lebih ringan di setiap video. Jika punya kondisi kesehatan khusus, konsultasikan dulu dengan dokter."],
-  ["Perlu alat apa saja?", "Cukup kursi kokoh tanpa roda. Beberapa latihan memakai botol air sebagai beban ringan — tidak wajib."],
-  ["Bagaimana cara membayar?", "Bisa lewat QRIS, transfer bank (virtual account), GoPay, ShopeePay, atau kartu. Setelah bayar, program langsung terbuka di menu Latihan Saya."],
-  ["Bisa ditonton di TV?", "Bisa. Buka website ini di HP atau tablet, lalu tampilkan ke TV (cast/screen mirroring). Bisa juga dibuka langsung dari browser Smart TV."],
-  ["Saya sering lupa password, bagaimana?", "Tidak perlu password. Saat masuk, cukup tulis email, lalu kami kirim kode ke email Anda."],
-  ["Kalau bingung, bisa minta bantuan?", "Tentu. Tekan tombol WhatsApp di bagian bawah halaman, tim kami siap membantu."],
-];
+// Semua teks & foto di halaman ini diatur dari Panel Admin → Pengaturan Web (daftarnya di src/lib/content-fields.ts).
 
 export default async function Home() {
-  const [programs, preview] = await Promise.all([publishedPrograms(), firstPreview()]);
+  const [programs, preview, c] = await Promise.all([publishedPrograms(), firstPreview(), getContent()]);
 
   return (
     <>
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 md:grid-cols-2 md:py-20">
-        <div className="space-y-6">
-          <p className="font-bold uppercase tracking-widest text-accent">Senam kursi untuk usia 50+</p>
-          <h1 className="text-5xl font-semibold leading-[1.05] md:text-6xl">
-            Tubuh lebih kuat. Langkah lebih mantap.
-          </h1>
-          <p className="max-w-prose text-xl text-muted-foreground">
-            Latihan pelan dan terpandu yang bisa Anda ikuti dari rumah, cukup dengan sebuah kursi. Bangun kekuatan,
-            jaga keseimbangan, dan tetap mandiri melakukan hal-hal yang Anda sukai.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/program" className={buttonVariants({ size: "lg" })}>Lihat program</Link>
-            {preview && (
-              <Link href="#coba" className={buttonVariants({ size: "lg", variant: "outline" })}>Coba video gratis</Link>
-            )}
+      <section className="mx-auto max-w-6xl px-4 pt-10 pb-12 md:pt-16">
+        <h1 className="text-center text-[2.6rem] italic leading-[1] sm:text-6xl lg:text-[4.8rem]">
+          {c.hero_judul_1}
+          <br />
+          {c.hero_judul_2}
+        </h1>
+        <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-md space-y-3">
+            <p className="eyebrow">{c.hero_label}</p>
+            <p className="text-lg">{c.hero_teks}</p>
           </div>
+          <Link href="/program" className={buttonVariants({ size: "lg", variant: "outline", className: "max-md:w-full" })}>Lihat program</Link>
         </div>
-        <HeroArt />
+        <div className="mt-8">
+          <HeroArt photo={c.hero_foto} alt={c.hero_foto_alt} badges={[c.hero_badge_1, c.hero_badge_2]}>
+            {preview ? (
+              <div className="space-y-4">
+                <p className="tag">{c.video_label}</p>
+                <h2 className="text-[1.7rem] leading-tight md:text-3xl">{c.video_judul}</h2>
+                <p className="text-muted-foreground">{c.video_teks}</p>
+                <Link href="#coba" className={buttonVariants({ size: "lg", className: "w-full" })}>Putar video</Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="tag">{c.hero_kartu_label}</p>
+                <h2 className="text-[1.7rem] leading-tight md:text-3xl">{c.hero_kartu_judul}</h2>
+                <Link href="/program" className={buttonVariants({ size: "lg", className: "w-full" })}>Pilih program</Link>
+              </div>
+            )}
+          </HeroArt>
+        </div>
       </section>
 
-      <section className="border-y bg-secondary/50">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-3">
-          {[
-            [Armchair, "Kekuatan", "Otot kaki dan lengan lebih kuat untuk berdiri, naik tangga, dan membawa belanjaan."],
-            [Footprints, "Keseimbangan", "Melatih kestabilan tubuh supaya lebih percaya diri dan risiko jatuh berkurang."],
-            [HeartHandshake, "Semangat", "Pelatih yang sabar dan ramah, bergerak pelan bersama Anda di setiap video."],
-          ].map(([Icon, title, text]) => {
-            const I = Icon as typeof Armchair;
-            return (
-              <div key={title as string} className="flex gap-4">
-                <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                  <I className="size-7" aria-hidden />
-                </span>
-                <div>
-                  <h2 className="text-xl font-semibold">{title as string}</h2>
-                  <p className="text-muted-foreground">{text as string}</p>
-                </div>
+      <section className="border-y">
+        <div className="mx-auto grid max-w-6xl md:grid-cols-3 md:divide-x">
+          {([1, 2, 3] as const).map((n) => (
+            <div key={n} className="space-y-4 border-b px-4 py-10 last:border-b-0 md:border-b-0 md:px-8">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-card">
+                <SiteImage src={c[`manfaat_${n}_foto`]} alt={c[`manfaat_${n}_foto_alt`]} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
               </div>
-            );
-          })}
+              <h2 className="text-3xl">{c[`manfaat_${n}_judul`]}</h2>
+              <p className="text-muted-foreground">{c[`manfaat_${n}_teks`]}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-10 max-w-2xl space-y-3">
-          <p className="font-bold uppercase tracking-widest text-accent">Pilih program</p>
-          <h2 className="text-4xl font-semibold">Mulai dari program yang paling cocok untuk Anda</h2>
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl space-y-4">
+            <p className="eyebrow">{c.program_label}</p>
+            <h2 className="text-4xl md:text-5xl">{c.program_judul}</h2>
+          </div>
+          <Link href="/program" className={buttonVariants({ variant: "outline", className: "self-start md:self-auto" })}>Semua program</Link>
         </div>
         {programs.length ? (
           <div className="grid gap-8 pt-4 md:grid-cols-3">
             {programs.map((p) => <ProgramCard key={p.id} program={p} />)}
           </div>
         ) : (
-          <p className="rounded-2xl bg-muted p-8 text-center text-lg text-muted-foreground">Program segera hadir.</p>
+          <p className="rounded-3xl bg-card p-8 text-center text-lg">Program segera hadir.</p>
         )}
       </section>
 
-      <section className="bg-primary text-primary-foreground">
+      <section className="bg-band text-band-foreground">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="mb-10 text-4xl font-semibold">Semudah tiga langkah</h2>
-          <ol className="grid gap-8 md:grid-cols-3">
-            {[
-              [MousePointerClick, "Pilih program", "Lihat isi tiap program dan tonton video contohnya dulu."],
-              [Wallet, "Bayar dengan mudah", "QRIS, transfer bank, GoPay, ShopeePay, atau kartu."],
-              [MonitorPlay, "Latihan kapan saja", "Buka menu Latihan Saya dari HP, tablet, atau TV."],
-            ].map(([Icon, title, text], i) => {
-              const I = Icon as typeof Wallet;
+          <h2 className="mb-10 text-4xl md:text-5xl">{c.langkah_judul}</h2>
+          <ol className="grid md:grid-cols-3 md:divide-x md:divide-band-foreground/30">
+            {([1, 2, 3] as const).map((n) => {
+              const I = [MousePointerClick, Wallet, MonitorPlay][n - 1];
               return (
-                <li key={title as string} className="space-y-3">
+                <li key={n} className="space-y-3 py-6 md:px-8 md:py-0 md:first:pl-0">
                   <span className="flex items-center gap-3">
-                    <span className="flex size-12 items-center justify-center rounded-full bg-primary-foreground font-heading text-2xl font-semibold text-primary">{i + 1}</span>
-                    <I className="size-7 opacity-80" aria-hidden />
+                    <span className="flex size-14 items-center justify-center rounded-full bg-band-foreground font-heading text-3xl text-band">{n}</span>
+                    <I className="size-7 text-band-muted" aria-hidden />
                   </span>
-                  <h3 className="text-2xl font-semibold">{title as string}</h3>
-                  <p className="text-primary-foreground/85">{text as string}</p>
+                  <h3 className="text-3xl">{c[`langkah_${n}_judul`]}</h3>
+                  <p className="text-band-muted">{c[`langkah_${n}_teks`]}</p>
                 </li>
               );
             })}
@@ -104,25 +102,30 @@ export default async function Home() {
         </div>
       </section>
 
+      <AppShowcase
+        text={{ name: c.nama, label: c.tampilan_label, title1: c.tampilan_judul_1, title2: c.tampilan_judul_2, text: c.tampilan_teks }}
+        programs={programs.slice(0, 3).map((p) => ({ title: p.title, level: p.level, price: rupiah(p.price) }))} />
+
       {preview && (
         <section id="coba" className="mx-auto max-w-4xl scroll-mt-28 px-4 py-16">
-          <div className="mb-8 space-y-3 text-center">
-            <p className="font-bold uppercase tracking-widest text-accent">Video gratis</p>
-            <h2 className="text-4xl font-semibold">Coba satu latihan sekarang</h2>
-            <p className="text-lg text-muted-foreground">Siapkan kursi, putar videonya, dan ikuti gerakannya pelan-pelan.</p>
+          <div className="mb-8 space-y-4 text-center">
+            <p className="eyebrow">{c.video_label}</p>
+            <h2 className="text-4xl md:text-5xl">{c.video_judul}</h2>
+            <p className="text-lg text-muted-foreground">{c.video_teks}</p>
           </div>
           <VideoFrame src={playbackUrl(preview)} title={preview.title} />
         </section>
       )}
 
       <section id="tanya-jawab" className="mx-auto max-w-3xl scroll-mt-28 px-4 py-16">
-        <h2 className="mb-8 text-4xl font-semibold">Tanya jawab</h2>
-        <div className="divide-y rounded-3xl border bg-card">
-          {faq.map(([q, a]) => (
+        <p className="eyebrow mb-4">{c.faq_label}</p>
+        <h2 className="mb-8 text-4xl md:text-5xl">{c.faq_judul}</h2>
+        <div className="divide-y divide-foreground/20 rounded-3xl bg-card">
+          {c.faq.map(({ q, a }) => (
             <details key={q} className="group p-6">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold">
                 {q}
-                <span className="text-2xl text-primary transition group-open:rotate-45" aria-hidden>+</span>
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-foreground text-2xl transition group-open:rotate-45" aria-hidden>+</span>
               </summary>
               <p className="mt-3 text-muted-foreground">{a}</p>
             </details>
@@ -131,10 +134,10 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="flex flex-col items-start gap-6 rounded-[2.5rem] bg-accent p-10 text-accent-foreground md:flex-row md:items-center md:justify-between md:p-14">
-          <div className="space-y-2">
-            <h2 className="text-4xl font-semibold">Tidak ada kata terlambat untuk mulai bergerak.</h2>
-            <p className="text-lg opacity-90">Bergabunglah dengan {site.name} hari ini.</p>
+        <div className="flex flex-col items-start gap-6 rounded-[2rem] bg-band p-10 text-band-foreground md:flex-row md:items-center md:justify-between md:p-14">
+          <div className="space-y-3">
+            <h2 className="text-4xl italic md:text-5xl">{c.ajakan_judul}</h2>
+            <p className="text-lg text-band-muted">{c.ajakan_teks}</p>
           </div>
           <Link href="/program" className={buttonVariants({ size: "lg", variant: "secondary", className: "shrink-0" })}>Pilih program</Link>
         </div>

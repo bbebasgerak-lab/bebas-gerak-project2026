@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { LayoutDashboard, PlaySquare, Users, Globe } from "lucide-react";
+import { LayoutDashboard, PlaySquare, Users, Globe, Settings } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { requireAdmin } from "@/lib/auth";
 import { dbReady } from "@/lib/data";
@@ -11,6 +11,7 @@ const nav = [
   ["/admin", "Ringkasan", LayoutDashboard],
   ["/admin/program", "Program & Video", PlaySquare],
   ["/admin/member", "Member & Pesanan", Users],
+  ["/admin/pengaturan", "Pengaturan Web", Settings],
 ] as const;
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {

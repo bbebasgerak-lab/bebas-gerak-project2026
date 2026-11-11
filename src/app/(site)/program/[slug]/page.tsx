@@ -26,14 +26,14 @@ export default async function ProgramDetail({ params }: PageProps<"/program/[slu
     <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 lg:grid-cols-[1fr_380px]">
       <div className="space-y-8">
         <div className="space-y-3">
-          {program.level && <p className="font-bold uppercase tracking-widest text-accent">{program.level}</p>}
-          <h1 className="text-5xl font-semibold">{program.title}</h1>
+          {program.level && <p className="eyebrow">{program.level}</p>}
+          <h1 className="text-[2.6rem] leading-[1.05] md:text-6xl">{program.title}</h1>
           {program.tagline && <p className="text-xl text-muted-foreground">{program.tagline}</p>}
         </div>
 
         {preview && (
           <div className="space-y-3">
-            <h2 className="text-2xl font-semibold">Video contoh gratis</h2>
+            <h2 className="text-3xl">Video contoh gratis</h2>
             <VideoFrame src={playbackUrl(preview)} title={preview.title} />
           </div>
         )}
@@ -42,8 +42,8 @@ export default async function ProgramDetail({ params }: PageProps<"/program/[slu
 
         {!membership && videos.length > 0 && (
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Isi program ({videos.length} video)</h2>
-            <ol className="divide-y rounded-3xl border bg-card">
+            <h2 className="text-3xl">Isi program ({videos.length} video)</h2>
+            <ol className="divide-y divide-foreground/20 rounded-3xl bg-card">
               {videos.map((v, i) => {
                 const open = owned || v.is_preview;
                 return (
@@ -62,8 +62,8 @@ export default async function ProgramDetail({ params }: PageProps<"/program/[slu
         )}
       </div>
 
-      <aside className="lg:sticky lg:top-32 h-fit space-y-5 rounded-3xl border-2 border-primary bg-card p-7 shadow-lg">
-        <p className="font-heading text-4xl font-semibold">{rupiah(program.price)}</p>
+      <aside className="lg:sticky lg:top-32 h-fit space-y-5 rounded-3xl border-2 border-foreground bg-card p-7">
+        <p className="font-heading text-5xl">{rupiah(program.price)}</p>
         <ul className="space-y-2">
           {[
             membership ? "Semua program & video baru" : `${videos.length} video latihan terpandu`,

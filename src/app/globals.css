@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-body);
   --font-heading: var(--font-display);
+  --font-mono: var(--font-code);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -34,6 +35,10 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-band: var(--band);
+  --color-band-foreground: var(--band-foreground);
+  --color-band-muted: var(--band-muted);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -48,39 +53,43 @@
 }
 
 :root {
-  /* Hangat & terpercaya: krem, hijau tua, aksen terakota. Kontras tinggi untuk lansia. */
-  --background: oklch(0.973 0.013 80);
-  --foreground: oklch(0.26 0.02 155);
-  --card: oklch(0.995 0.006 85);
-  --card-foreground: oklch(0.26 0.02 155);
-  --popover: oklch(0.995 0.006 85);
-  --popover-foreground: oklch(0.26 0.02 155);
-  --primary: oklch(0.42 0.07 175);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.925 0.025 80);
-  --secondary-foreground: oklch(0.26 0.02 155);
-  --muted: oklch(0.935 0.02 80);
-  --muted-foreground: oklch(0.46 0.015 160);
-  --accent: oklch(0.56 0.14 40);
-  --accent-foreground: oklch(0.99 0 0);
-  --destructive: oklch(0.53 0.2 27);
-  --border: oklch(0.87 0.025 80);
-  --input: oklch(0.8 0.025 80);
-  --ring: oklch(0.42 0.07 175);
-  --chart-1: oklch(0.42 0.07 175);
-  --chart-2: oklch(0.56 0.14 40);
-  --chart-3: oklch(0.7 0.1 85);
-  --chart-4: oklch(0.6 0.05 220);
-  --chart-5: oklch(0.35 0.03 155);
+  /* Token dari DESIGN.md v2 — gaya editorial "Kinetically": abu-krem, tinta hitam, tanpa warna aksen. */
+  --background: #eeefe9;        /* canvas */
+  --foreground: #131313;        /* ink — 16.1:1 */
+  --card: #d5dadc;              /* kartu — ink di atasnya 13.2:1 */
+  --card-foreground: #131313;
+  --popover: #ffffff;
+  --popover-foreground: #131313;
+  --primary: #131313;
+  --primary-foreground: #eeefe9;
+  --primary-hover: #3a3a38;
+  --secondary: #eeefe9;         /* tombol krem di pita hitam */
+  --secondary-foreground: #131313;
+  --muted: #e2e4dd;
+  --muted-foreground: #3d3d3a;  /* 9.4:1 di kanvas, 7.7:1 di kartu */
+  --accent: #d5dadc;
+  --accent-foreground: #131313;
+  --destructive: #c82014;
+  --border: #131313;            /* garis editorial tegas */
+  --input: #131313;
+  --ring: #131313;
+  --band: #131313;
+  --band-foreground: #eeefe9;
+  --band-muted: #b9bcb4;        /* 9.7:1 di pita hitam */
+  --chart-1: #131313;
+  --chart-2: #3d3d3a;
+  --chart-3: #7a7d77;
+  --chart-4: #b9bcb4;
+  --chart-5: #d5dadc;
   --radius: 0.9rem;
-  --sidebar: oklch(0.955 0.018 80);
-  --sidebar-foreground: oklch(0.26 0.02 155);
-  --sidebar-primary: oklch(0.42 0.07 175);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.925 0.025 80);
-  --sidebar-accent-foreground: oklch(0.26 0.02 155);
-  --sidebar-border: oklch(0.87 0.025 80);
-  --sidebar-ring: oklch(0.42 0.07 175);
+  --sidebar: #e2e4dd;
+  --sidebar-foreground: #131313;
+  --sidebar-primary: #131313;
+  --sidebar-primary-foreground: #eeefe9;
+  --sidebar-accent: #d5dadc;
+  --sidebar-accent-foreground: #131313;
+  --sidebar-border: #131313;
+  --sidebar-ring: #131313;
 }
 
 @layer base {
@@ -92,10 +101,34 @@
   }
   html {
     @apply font-sans;
-    font-size: 112.5%; /* teks dasar 18px untuk lansia */
+    font-size: 100%; /* teks dasar 16px — diturunkan dari 20px atas permintaan pemilik (lihat DESIGN.md) */
   }
   h1, h2, h3 {
-    @apply font-heading tracking-tight;
+    @apply font-heading font-normal;
     text-wrap: balance;
+  }
+  html {
+    font-synthesis-weight: none; /* Anton hanya punya bobot 400 — cegah tebal palsu */
+  }
+}
+
+/* Cincin fokus tebal untuk semua kontrol. Sengaja di luar @layer agar menang dari utilitas outline-none. */
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+.bg-band :focus-visible,
+.bg-primary :focus-visible {
+  outline-color: var(--band-foreground);
+}
+
+@layer components {
+  /* Label kapsul bergaris di atas judul (gaya template). */
+  .eyebrow {
+    @apply inline-flex items-center rounded-full border-[1.5px] border-current px-4 py-1 font-mono text-sm font-medium uppercase tracking-wide;
+  }
+  /* Kapsul hitam untuk tag/level. */
+  .tag {
+    @apply inline-flex items-center rounded-full bg-foreground px-4 py-1 font-mono text-sm font-medium uppercase tracking-wide text-background;
   }
 }

@@ -84,3 +84,48 @@ test("youtubeId: berbagai bentuk link", () => {
   assert.equal(youtubeId("https://www.youtube.com/embed/dQw4w9WgXcQ"), "dQw4w9WgXcQ");
   assert.equal(youtubeId("bukan link"), null);
 });
+
+// ---- Pengaturan Web ----
+import { mergeContent, isAllowedImage, waLink, allFields, defaultFaq } from "./content-fields.ts";
+
+test("mergeContent: tanpa isi tersimpan memakai isi awal", () => {
+  const c = mergeContent(null);
+  assert.equal(c.hero_judul_1, "Tubuh Lebih Kuat,");
+  assert.deepEqual(c.faq, defaultFaq);
+  for (const f of allFields) assert.equal(typeof c[f.key], "string");
+});
+
+test("mergeContent: isi tersimpan menimpa isi awal, kolom kosong/rusak kembali ke awal", () => {
+  const c = mergeContent({ hero_judul_1: "  Halo  ", hero_judul_2: "   ", nama: 123, tidak_dikenal: "x" });
+  assert.equal(c.hero_judul_1, "Halo");
+  assert.equal(c.hero_judul_2, "Langkah Lebih Mantap");
+  assert.equal(c.nama, "Bebas Gerak");
+  assert.equal("tidak_dikenal" in c, false);
+});
+
+test("mergeContent: tanya jawab yang tidak lengkap dibuang", () => {
+  assert.deepEqual(mergeContent({ faq: [{ q: "A?", a: "B" }, { q: "", a: "x" }, "rusak"] }).faq, [{ q: "A?", a: "B" }]);
+  assert.deepEqual(mergeContent({ faq: [] }).faq, defaultFaq);
+  assert.deepEqual(mergeContent({ faq: "rusak" }).faq, defaultFaq);
+});
+
+test("kunci kolom tidak ada yang kembar", () => {
+  const keys = allFields.map((f) => f.key);
+  assert.equal(new Set(keys).size, keys.length);
+});
+
+test("isAllowedImage: hanya foto bawaan atau dari penyimpanan web ini", () => {
+  const base = "https://abc.supabase.co/storage/v1/object/public/web/";
+  assert.equal(isAllowedImage("/images/hero-senam.jpg", base), true);
+  assert.equal(isAllowedImage(base + "foto/1.jpg", base), true);
+  assert.equal(isAllowedImage("https://jahat.example/x.jpg", base), false);
+  assert.equal(isAllowedImage("/images/../rahasia", base), false);
+  assert.equal(isAllowedImage(base + "../x", base), false);
+  assert.equal(isAllowedImage("https://jahat.example/x.jpg", ""), false);
+});
+
+test("waLink: hanya untuk nomor yang berupa angka", () => {
+  assert.equal(waLink(""), null);
+  assert.equal(waLink("0812-3456"), null);
+  assert.match(waLink("6281234567890")!, /^https:\/\/wa\.me\/6281234567890\?text=/);
+});

@@ -1,27 +1,35 @@
-// Ilustrasi pengganti foto. Ganti dengan foto instruktur asli dari client kalau sudah ada.
-export function HeroArt() {
+import type { ReactNode } from "react";
+import { SiteImage } from "@/components/site-image";
+
+// Panel hero bergaya editorial (DESIGN.md).
+// Foto: Khanh Do di Unsplash (Unsplash License — bebas dipakai komersial, tanpa wajib atribusi)
+// https://unsplash.com/photos/group-of-women-exercising-together-in-a-park-YFzKE1P6l80
+// Foto & label bisa diganti dari Panel Admin → Pengaturan Web.
+export function HeroArt({ photo, alt, badges, children }: { photo: string; alt: string; badges: string[]; children?: ReactNode }) {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-md">
-      <div className="absolute inset-0 rounded-[3rem] bg-secondary" />
-      <div className="absolute inset-6 rounded-[2.5rem] bg-primary/90" />
-      <svg viewBox="0 0 300 300" className="absolute inset-6 h-[calc(100%-3rem)] w-[calc(100%-3rem)]" aria-hidden>
-        {/* kursi */}
-        <path d="M95 175h90v14H95zM100 189v66M180 189v66M170 175v-70" className="stroke-primary-foreground/60" strokeWidth="8" strokeLinecap="round" fill="none" />
-        {/* orang duduk mengangkat tangan */}
-        <circle cx="140" cy="78" r="17" className="fill-[oklch(0.85_0.06_60)]" />
-        <path d="M140 98v62" className="stroke-accent" strokeWidth="26" strokeLinecap="round" />
-        <path d="M128 108 98 62M152 108l30-46" className="stroke-[oklch(0.85_0.06_60)]" strokeWidth="10" strokeLinecap="round" fill="none" />
-        <path d="M135 165h40v62M150 165h30" className="stroke-primary-foreground" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <path d="M168 232h22" className="stroke-primary-foreground" strokeWidth="10" strokeLinecap="round" />
-      </svg>
-      <div className="absolute -left-3 top-10 rounded-2xl border bg-card px-4 py-3 shadow-md">
-        <p className="font-heading text-2xl font-semibold">20 menit</p>
-        <p className="text-sm text-muted-foreground">cukup sehari</p>
+    <div className="relative overflow-hidden rounded-[2rem] bg-foreground md:aspect-[16/8]">
+      <div className="relative aspect-[4/3] md:absolute md:inset-0 md:aspect-auto">
+        <SiteImage
+          src={photo}
+          alt={alt}
+          fill
+          loading="eager"
+          fetchPriority="high"
+          sizes="(min-width: 1152px) 1120px, 100vw"
+          className="object-cover object-[30%_45%]"
+        />
+        {/* HP: label di bawah foto agar tidak menutupi wajah; desktop: pojok kiri atas. */}
+        <div className="absolute inset-x-3 bottom-3 flex flex-wrap gap-2 md:inset-x-auto md:bottom-auto md:left-6 md:top-6">
+          {badges.map((b) => (
+            <span key={b} className="eyebrow border-transparent bg-foreground/85 text-background">{b}</span>
+          ))}
+        </div>
       </div>
-      <div className="absolute -right-3 bottom-12 rounded-2xl border bg-card px-4 py-3 shadow-md">
-        <p className="font-bold">Dari kursi</p>
-        <p className="text-sm text-muted-foreground">aman untuk lutut</p>
-      </div>
+      {children && (
+        <div className="m-4 rounded-3xl bg-card p-6 md:absolute md:bottom-6 md:right-6 md:m-0 md:w-[26rem] md:p-8">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,16 +1,17 @@
 import { ProgramCard } from "@/components/program-card";
 import { publishedPrograms } from "@/lib/data";
+import { getContent } from "@/lib/content";
 
 export const metadata = { title: "Program Latihan" };
 
 export default async function ProgramsPage() {
-  const programs = await publishedPrograms();
+  const [programs, c] = await Promise.all([publishedPrograms(), getContent()]);
   return (
     <div className="mx-auto max-w-6xl px-4 py-14">
       <div className="mb-12 max-w-2xl space-y-3">
-        <h1 className="text-5xl font-semibold">Program latihan</h1>
+        <h1 className="text-[2.6rem] leading-[1.05] md:text-6xl">{c.halprogram_judul}</h1>
         <p className="text-xl text-muted-foreground">
-          Setiap program bisa diikuti dari kursi di rumah. Tonton video contohnya dulu sebelum membeli.
+          {c.halprogram_teks}
         </p>
       </div>
       {programs.length ? (
