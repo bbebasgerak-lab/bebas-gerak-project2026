@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bebas Gerak
 
-## Getting Started
+Website latihan kursi untuk usia 50 tahun ke atas. Pengunjung memilih program, membayar secara online, lalu menonton video latihan dari HP, tablet, atau TV. Pemilik web mengelola program, member, dan seluruh isi halaman dari panel admin tanpa menyentuh kode.
 
-First, run the development server:
+Versi live: https://bebas-gerak-one.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Fitur
+
+**Untuk pengunjung**
+- Beranda, daftar program, halaman detail program, dan halaman Tentang Kami.
+- Video contoh gratis yang bisa ditonton sebelum membeli.
+- Daftar dan masuk dengan akun Google atau email.
+- Tampilan dirancang untuk pembaca lanjut usia: huruf besar, kontras tinggi, tombol lebar.
+
+**Untuk member**
+- Halaman Latihan Saya berisi semua program yang sudah dibeli.
+- Pemutar video dengan penanda latihan yang sudah selesai.
+- Akses selamanya atau berjangka (misalnya membership satu tahun).
+
+**Untuk admin**
+- Ringkasan pendapatan, pesanan, dan jumlah member aktif.
+- Program & Video: tambah, ubah, atur harga, lama akses, dan urutan tampil.
+- Member & Pesanan: lihat pesanan, beri atau cabut akses secara manual.
+- Pengaturan Web: ubah tulisan, foto, tanya jawab, dan nomor WhatsApp. Perubahan langsung tampil tanpa deploy ulang.
+
+## Teknologi
+
+| Bagian | Yang dipakai |
+| --- | --- |
+| Kerangka | Next.js 16 (App Router), React 19, TypeScript |
+| Tampilan | Tailwind CSS 4, komponen shadcn/ui |
+| Login | Clerk |
+| Database dan penyimpanan foto | Supabase |
+| Pembayaran | Midtrans (QRIS, virtual account, e-wallet, kartu) |
+| Video | YouTube, dengan pilihan pindah ke Bunny Stream |
+| Hosting | Vercel |
+
+## Menjalankan di komputer sendiri
+
+Butuh Node.js 22 atau lebih baru.
+
+1. Pasang dependensi.
+
+   ```bash
+   npm install
+   ```
+
+2. Salin `.env.example` menjadi `.env.local`, lalu isi kunci Clerk, Supabase, dan Midtrans. Petunjuk tiap kunci ada di dalam file tersebut.
+
+3. Siapkan database: buka Supabase, masuk ke SQL Editor, tempel isi `supabase/schema.sql`, lalu jalankan.
+
+4. Jadikan akunmu admin: di dashboard Clerk, buka Users, pilih akunmu, lalu isi Public metadata dengan `{"role": "admin"}`.
+
+5. Jalankan web.
+
+   ```bash
+   npm run dev
+   ```
+
+   Buka http://localhost:3000. Panel admin ada di `/admin`.
+
+## Perintah
+
+| Perintah | Kegunaan |
+| --- | --- |
+| `npm run dev` | Menjalankan web di komputer sendiri |
+| `npm run build` | Membuat versi produksi |
+| `npm test` | Menjalankan tes (akses member, tanda tangan Midtrans, isi web) |
+| `npm run lint` | Memeriksa kerapian kode |
+
+## Susunan folder
+
+```
+src/app/(site)   Halaman publik dan area member
+src/app/admin    Panel admin
+src/app/api      Checkout dan webhook Midtrans
+src/components   Komponen tampilan
+src/lib          Logika: akses, pembayaran, video, isi web
+supabase         Skema database
+DESIGN.md        Panduan desain (warna, huruf, komponen)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Mengubah isi web
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Tulisan dan foto halaman publik diatur dari Panel Admin, menu Pengaturan Web. Isinya disimpan di Supabase Storage (bucket `web`), jadi tidak perlu deploy ulang setelah mengubahnya.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Daftar kolom yang bisa diubah ada di `src/lib/content-fields.ts`. Untuk membuat tulisan baru bisa diubah dari admin, tambahkan satu baris di file itu lalu pakai nilainya di halaman lewat `getContent()`.
 
-## Learn More
+Susunan halaman, warna, dan huruf tetap diatur di kode, mengikuti `DESIGN.md`.
 
-To learn more about Next.js, take a look at the following resources:
+## Keamanan
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- File `.env.local` berisi kunci rahasia dan tidak pernah diunggah ke repo ini.
+- Database hanya diakses dari server. Kunci publik tidak bisa membaca atau menulis data.
+- Webhook pembayaran memeriksa tanda tangan Midtrans sebelum membuka akses.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Status
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pembayaran Midtrans dan domain sendiri belum dipasang. Foto pada halaman publik masih foto contoh berlisensi bebas dari Unsplash dan akan diganti dengan foto asli.
