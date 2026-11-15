@@ -9,7 +9,7 @@ import { FaqEditor, ImageField, SettingsForm, TestimoniEditor } from "./editors"
 
 export const metadata = { title: "Pengaturan Web" };
 
-const sectionClass = "scroll-mt-6 space-y-5 rounded-2xl border bg-card p-6";
+const sectionClass = "scroll-mt-6 space-y-5 rounded-3xl bg-card p-6";
 const FAQ_ID = "bagian-tanya-jawab";
 const TESTI_ID = "bagian-testimoni";
 
@@ -21,7 +21,7 @@ export default async function SettingsPage() {
         {f.kind === "image" ? (
           <ImageField name={f.key} defaultValue={c[f.key]} original={f.def} />
         ) : f.kind === "area" ? (
-          <Textarea name={f.key} defaultValue={c[f.key]} rows={f.key === "tentang_isi" ? 10 : 3} className="text-base" />
+          <Textarea name={f.key} defaultValue={c[f.key]} rows={f.key.endsWith("_isi") ? 12 : 3} className="text-base" />
         ) : (
           <Input name={f.key} defaultValue={c[f.key]} className="h-11 text-base" />
         )}
@@ -32,7 +32,7 @@ export default async function SettingsPage() {
   return (
     <>
       <div className="space-y-3">
-        <h1 className="text-4xl font-semibold">Pengaturan Web</h1>
+        <h1 className="text-4xl md:text-5xl">Pengaturan Web</h1>
         <p className="max-w-prose text-lg text-muted-foreground">
           Ubah tulisan dan foto di website, lalu tekan <b>Simpan perubahan</b> di bagian bawah. Kolom yang dikosongkan kembali ke tulisan awal.
         </p>
@@ -46,7 +46,7 @@ export default async function SettingsPage() {
         {groups.map((g, i) => (
           <section key={g.title} id={`bagian-${i}`} className={sectionClass}>
             <div className="space-y-1">
-              <h2 className="text-2xl font-semibold">{g.title}</h2>
+              <h2 className="text-3xl">{g.title}</h2>
               {g.note && <p className="text-muted-foreground">{g.note}</p>}
             </div>
             <div className="grid gap-5 md:grid-cols-2">{g.fields.map(text)}</div>
@@ -54,7 +54,7 @@ export default async function SettingsPage() {
         ))}
         <section id={TESTI_ID} className={sectionClass}>
           <div className="space-y-1">
-            <h2 className="text-2xl font-semibold">Beranda: testimoni</h2>
+            <h2 className="text-3xl">Beranda: testimoni</h2>
             <p className="text-muted-foreground">Unggah screenshot pesan dari member. Bisa ditambah atau dihapus. Kalau semua dihapus, bagian testimoni tidak tampil.</p>
           </div>
           <div className="grid gap-5 md:grid-cols-2">{[testiHeading.label, testiHeading.judul, testiHeading.teks].map(text)}</div>
@@ -62,7 +62,7 @@ export default async function SettingsPage() {
         </section>
         <section id={FAQ_ID} className={sectionClass}>
           <div className="space-y-1">
-            <h2 className="text-2xl font-semibold">Beranda: tanya jawab</h2>
+            <h2 className="text-3xl">Beranda: tanya jawab</h2>
             <p className="text-muted-foreground">Bisa ditambah atau dihapus. Kalau semua dihapus, pertanyaan awal tampil lagi.</p>
           </div>
           <div className="grid gap-5 md:grid-cols-2">{[faqHeading.label, faqHeading.judul].map(text)}</div>

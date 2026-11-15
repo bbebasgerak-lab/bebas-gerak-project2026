@@ -6,9 +6,9 @@ import type { Order } from "@/lib/supabase";
 const label = { paid: "Dibayar", pending: "Menunggu", failed: "Gagal" } as const;
 
 export function OrdersTable({ orders }: { orders: (Order & { programs: { title: string } | null })[] }) {
-  if (!orders.length) return <p className="rounded-2xl bg-muted p-6 text-muted-foreground">Belum ada pesanan.</p>;
+  if (!orders.length) return <p className="rounded-3xl bg-card p-6 text-muted-foreground">Belum ada pesanan.</p>;
   return (
-    <div className="overflow-x-auto rounded-2xl border bg-card">
+    <div className="overflow-x-auto rounded-3xl bg-card">
       <Table className="text-base">
         <TableHeader>
           <TableRow>

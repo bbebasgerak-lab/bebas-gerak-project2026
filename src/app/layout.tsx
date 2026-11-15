@@ -17,7 +17,13 @@ const code = JetBrains_Mono({ variable: "--font-code", subsets: ["latin"], weigh
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = await getContent();
-  return { title: { default: `${c.nama} — ${c.judul_tab}`, template: `%s · ${c.nama}` }, description: c.tagline };
+  return {
+    // Alamat dasar untuk gambar pratinjau link (opengraph-image.png) dan tautan kanonis.
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://bebasgerak.my.id"),
+    title: { default: `${c.nama} — ${c.judul_tab}`, template: `%s · ${c.nama}` },
+    description: c.tagline,
+    openGraph: { siteName: c.nama, locale: "id_ID", type: "website", description: c.tagline },
+  };
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

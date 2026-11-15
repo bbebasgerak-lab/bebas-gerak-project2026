@@ -23,17 +23,17 @@ export default async function AdminHome() {
 
   return (
     <>
-      <h1 className="text-4xl font-semibold">Ringkasan</h1>
+      <h1 className="text-4xl md:text-5xl">Ringkasan</h1>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map(([label, value]) => (
-          <div key={label} className="rounded-2xl border bg-card p-6">
-            <p className="text-muted-foreground">{label}</p>
-            <p className="font-heading text-3xl font-semibold">{value}</p>
+          <div key={label} className="space-y-3 rounded-3xl bg-card p-6">
+            <p className="font-mono text-sm font-bold uppercase tracking-wide text-muted-foreground">{label}</p>
+            <p className="font-heading text-4xl">{value}</p>
           </div>
         ))}
       </div>
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Pesanan terbaru</h2>
+        <h2 className="text-3xl">Pesanan terbaru</h2>
         <OrdersTable orders={recent ?? []} />
       </section>
     </>

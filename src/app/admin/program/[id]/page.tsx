@@ -20,17 +20,17 @@ export default async function EditProgram({ params }: PageProps<"/admin/program/
 
   return (
     <>
-      <Link href="/admin/program" className="inline-flex items-center gap-2 font-bold text-primary">
+      <Link href="/admin/program" className="inline-flex items-center gap-2 font-bold underline-offset-4 hover:underline">
         <ArrowLeft className="size-5" aria-hidden /> Semua program
       </Link>
-      <h1 className="text-4xl font-semibold">{program.title}</h1>
+      <h1 className="text-4xl md:text-5xl">{program.title}</h1>
       <ProgramForm program={program} photo={photos[program.id]} />
 
       {program.kind === "program" && (
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold">Video ({videos.length})</h2>
+          <h2 className="text-3xl">Video ({videos.length})</h2>
           {videos.map((v) => (
-            <details key={v.id} className="rounded-2xl border bg-card">
+            <details key={v.id} className="rounded-3xl bg-card">
               <summary className="flex cursor-pointer items-center gap-3 p-5 font-bold">
                 <span className="flex-1">{v.sort}. {v.title}</span>
                 {v.is_preview && <Badge variant="secondary">Gratis</Badge>}
@@ -45,8 +45,8 @@ export default async function EditProgram({ params }: PageProps<"/admin/program/
               </div>
             </details>
           ))}
-          <div className="space-y-3 rounded-2xl border-2 border-dashed p-5">
-            <h3 className="text-xl font-semibold">Tambah video</h3>
+          <div className="space-y-3 rounded-3xl border-2 border-dashed border-foreground/30 p-5">
+            <h3 className="text-2xl">Tambah video</h3>
             <VideoForm programId={program.id} nextSort={(videos.at(-1)?.sort ?? 0) + 1} />
           </div>
         </section>

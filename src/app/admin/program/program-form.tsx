@@ -21,7 +21,7 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
 
 export function ProgramForm({ program, photo = "" }: { program?: Program; photo?: string }) {
   return (
-    <ActionForm action={saveProgram} success="Program tersimpan" className="grid gap-5 rounded-2xl border bg-card p-6 md:grid-cols-2">
+    <ActionForm action={saveProgram} success="Program tersimpan" className="grid gap-5 rounded-3xl bg-card p-6 md:grid-cols-2">
       {program && <input type="hidden" name="id" value={program.id} />}
       <div className="md:col-span-2">
         <Field label="Foto program" hint="Tampil di bagian atas kartu program. Paling bagus foto mendatar (lebar).">

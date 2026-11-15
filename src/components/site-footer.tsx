@@ -19,7 +19,7 @@ export async function SiteFooter() {
             <Link href="/program" className="underline-offset-4 hover:underline">Semua Program</Link>
             <Link href="/tentang" className="underline-offset-4 hover:underline">Tentang Kami</Link>
             <Link href="/masuk" className="underline-offset-4 hover:underline">Masuk Member</Link>
-            <Link href="/kebijakan-privasi" className="underline-offset-4 hover:underline">Kebijakan Privasi</Link>
+            <Link href="/kontak" className="underline-offset-4 hover:underline">Kontak</Link>
           </div>
         </nav>
         <div className="space-y-4 px-4 py-10 md:pl-8">
@@ -36,7 +36,14 @@ export async function SiteFooter() {
           </p>
         </div>
       </div>
-      <p className="border-t px-4 py-4 text-center font-mono text-sm uppercase tracking-wide">© {new Date().getFullYear()} {c.nama}</p>
+      <div className="flex flex-col items-center gap-3 border-t px-4 py-4 text-center font-mono text-sm uppercase tracking-wide md:flex-row md:justify-between md:px-8">
+        <p>© {new Date().getFullYear()} {c.nama}</p>
+        <nav aria-label="Ketentuan" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+          <Link href="/syarat-ketentuan" className="underline-offset-4 hover:underline">Syarat & Ketentuan</Link>
+          <Link href="/kebijakan-refund" className="underline-offset-4 hover:underline">Refund</Link>
+          <Link href="/kebijakan-privasi" className="underline-offset-4 hover:underline">Privasi</Link>
+        </nav>
+      </div>
     </footer>
   );
 }

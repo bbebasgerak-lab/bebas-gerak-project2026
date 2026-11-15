@@ -29,14 +29,14 @@ export default async function AdminMembers() {
 
   return (
     <>
-      <h1 className="text-4xl font-semibold">Member & Pesanan</h1>
+      <h1 className="text-4xl md:text-5xl">Member & Pesanan</h1>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Beri akses manual</h2>
+        <h2 className="text-3xl">Beri akses manual</h2>
         <p className="text-muted-foreground">
           Untuk member yang membayar di luar website, atau yang membayar memakai email berbeda. Orangnya harus sudah daftar di website.
         </p>
-        <ActionForm action={grantManual} success="Akses diberikan" className="grid items-end gap-4 rounded-2xl border bg-card p-6 md:grid-cols-[1fr_1fr_auto]">
+        <ActionForm action={grantManual} success="Akses diberikan" className="grid items-end gap-4 rounded-3xl bg-card p-6 md:grid-cols-[1fr_1fr_auto]">
           <Field label="Email member">
             <Input name="email" type="email" required className="h-11 text-base" />
           </Field>
@@ -50,9 +50,9 @@ export default async function AdminMembers() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Akses member</h2>
+        <h2 className="text-3xl">Akses member</h2>
         {access?.length ? (
-          <div className="overflow-x-auto rounded-2xl border bg-card">
+          <div className="overflow-x-auto rounded-3xl bg-card">
             <Table className="text-base">
               <TableHeader>
                 <TableRow>
@@ -86,12 +86,12 @@ export default async function AdminMembers() {
             </Table>
           </div>
         ) : (
-          <p className="rounded-2xl bg-muted p-6 text-muted-foreground">Belum ada member.</p>
+          <p className="rounded-3xl bg-card p-6 text-muted-foreground">Belum ada member.</p>
         )}
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Pesanan</h2>
+        <h2 className="text-3xl">Pesanan</h2>
         <OrdersTable orders={orders ?? []} />
       </section>
     </>
