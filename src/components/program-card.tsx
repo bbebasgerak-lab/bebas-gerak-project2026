@@ -12,8 +12,8 @@ export function ProgramCard({ program, photo }: { program: Program; photo?: stri
   return (
     <article
       className={cn(
-        "relative flex flex-col rounded-3xl bg-card",
-        featured && "outline-2 outline-foreground md:-translate-y-2",
+        "relative flex flex-col rounded-3xl bg-card transition duration-300 hover:-translate-y-1.5 hover:shadow-xl",
+        featured && "outline-2 outline-foreground md:-translate-y-2 md:hover:-translate-y-3.5",
       )}
     >
       {featured && (

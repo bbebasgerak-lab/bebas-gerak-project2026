@@ -15,7 +15,7 @@ export default async function ProgramsPage() {
         </p>
       </div>
       {programs.length ? (
-        <div className="grid gap-8 pt-4 md:grid-cols-3">
+        <div data-reveal-stagger className="grid gap-8 pt-4 md:grid-cols-3">
           {programs.map((p) => <ProgramCard key={p.id} program={p} photo={photos[p.id]} />)}
         </div>
       ) : (

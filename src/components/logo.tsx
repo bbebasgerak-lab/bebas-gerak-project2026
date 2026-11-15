@@ -6,5 +6,5 @@ import { cn } from "@/lib/utils";
 export async function Logo({ className }: { className?: string }) {
   const { nama, logo } = await getContent();
   // eslint-disable-next-line @next/next/no-img-element -- ukuran logo unggahan tidak diketahui; tinggi tetap, lebar menyesuaikan
-  return <img src={logo} alt={nama} className={cn("h-11 w-auto sm:h-12", className)} />;
+  return <img src={logo} alt={nama} className={cn("h-9 w-auto shrink-0 object-contain sm:h-12", className)} />;
 }

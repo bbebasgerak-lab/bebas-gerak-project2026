@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -14,6 +15,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <ScrollReveal />
     </>
   );
 }

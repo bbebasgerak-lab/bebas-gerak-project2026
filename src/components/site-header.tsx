@@ -16,7 +16,7 @@ export async function SiteHeader() {
         </div>
       )}
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4">
-        <Link href="/" className="flex items-center gap-2" aria-label={`${c.nama} — beranda`}>
+        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={`${c.nama} — beranda`}>
           <Logo />
         </Link>
         <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap text-base font-bold">
@@ -29,7 +29,7 @@ export async function SiteHeader() {
           {viewer ? (
             <>
               {viewer.isAdmin && (
-                <Link href="/admin" className={buttonVariants({ variant: "outline" })}>Panel Admin</Link>
+                <Link href="/admin" className={buttonVariants({ variant: "outline", className: "max-sm:hidden" })}>Panel Admin</Link>
               )}
               <Link href="/latihan" className={buttonVariants()}>Latihan Saya</Link>
               <UserButton appearance={{ elements: { avatarBox: "size-10" } }} />
@@ -47,6 +47,7 @@ export async function SiteHeader() {
         <Link href="/tentang">Tentang</Link>
         <Link href="/#testimoni">Testimoni</Link>
         <Link href="/#tanya-jawab">Tanya Jawab</Link>
+        {viewer?.isAdmin && <Link href="/admin" className="sm:hidden">Panel Admin</Link>}
       </nav>
     </header>
   );

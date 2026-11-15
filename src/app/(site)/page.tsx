@@ -18,19 +18,19 @@ export default async function Home() {
   return (
     <>
       <section className="mx-auto max-w-6xl px-4 pt-10 pb-12 md:pt-16">
-        <h1 className="text-center text-[2.6rem] italic leading-[1] sm:text-6xl lg:text-[4.8rem]">
+        <h1 className="hero-in text-center text-[2.6rem] italic leading-[1] sm:text-6xl lg:text-[4.8rem]">
           {c.hero_judul_1}
           <br />
           {c.hero_judul_2}
         </h1>
-        <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="hero-in mt-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between" style={{ "--hero-delay": "150ms" } as React.CSSProperties}>
           <div className="max-w-md space-y-3">
             <p className="eyebrow">{c.hero_label}</p>
             <p className="text-lg">{c.hero_teks}</p>
           </div>
           <Link href="/program" className={buttonVariants({ size: "lg", variant: "outline", className: "max-md:w-full" })}>Lihat program</Link>
         </div>
-        <div className="mt-8">
+        <div className="hero-photo-in mt-8">
           <HeroArt photo={c.hero_foto} alt={c.hero_foto_alt} badges={[c.hero_badge_1, c.hero_badge_2]}>
             {preview ? (
               <div className="space-y-4">
@@ -51,7 +51,7 @@ export default async function Home() {
       </section>
 
       <section className="border-y">
-        <div className="mx-auto grid max-w-6xl md:grid-cols-3 md:divide-x">
+        <div data-reveal-stagger className="mx-auto grid max-w-6xl md:grid-cols-3 md:divide-x">
           {([1, 2, 3] as const).map((n) => (
             <div key={n} className="space-y-4 border-b px-4 py-10 last:border-b-0 md:border-b-0 md:px-8">
               <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-card">
@@ -65,7 +65,7 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div data-reveal className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl space-y-4">
             <p className="eyebrow">{c.program_label}</p>
             <h2 className="text-4xl md:text-5xl">{c.program_judul}</h2>
@@ -73,7 +73,7 @@ export default async function Home() {
           <Link href="/program" className={buttonVariants({ variant: "outline", className: "self-start md:self-auto" })}>Semua program</Link>
         </div>
         {programs.length ? (
-          <div className="grid gap-8 pt-4 md:grid-cols-3">
+          <div data-reveal-stagger className="grid gap-8 pt-4 md:grid-cols-3">
             {programs.map((p) => <ProgramCard key={p.id} program={p} photo={photos[p.id]} />)}
           </div>
         ) : (
@@ -83,8 +83,8 @@ export default async function Home() {
 
       <section className="bg-band text-band-foreground">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="mb-10 text-4xl md:text-5xl">{c.langkah_judul}</h2>
-          <ol className="grid md:grid-cols-3 md:divide-x md:divide-band-foreground/30">
+          <h2 data-reveal className="mb-10 text-4xl md:text-5xl">{c.langkah_judul}</h2>
+          <ol data-reveal-stagger className="grid md:grid-cols-3 md:divide-x md:divide-band-foreground/30">
             {([1, 2, 3] as const).map((n) => {
               const I = [MousePointerClick, Wallet, MonitorPlay][n - 1];
               return (
@@ -108,24 +108,24 @@ export default async function Home() {
 
       {preview && (
         <section id="coba" className="mx-auto max-w-4xl scroll-mt-28 px-4 py-16">
-          <div className="mb-8 space-y-4 text-center">
+          <div data-reveal className="mb-8 space-y-4 text-center">
             <p className="eyebrow">{c.video_label}</p>
             <h2 className="text-4xl md:text-5xl">{c.video_judul}</h2>
             <p className="text-lg text-muted-foreground">{c.video_teks}</p>
           </div>
-          <VideoFrame src={playbackUrl(preview)} title={preview.title} />
+          <div data-reveal="zoom"><VideoFrame src={playbackUrl(preview)} title={preview.title} /></div>
         </section>
       )}
 
       {c.testimoni.length > 0 && (
         <section id="testimoni" className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16">
-          <div className="mb-10 max-w-2xl space-y-4">
+          <div data-reveal className="mb-10 max-w-2xl space-y-4">
             <p className="eyebrow">{c.testi_label}</p>
             <h2 className="text-4xl md:text-5xl">{c.testi_judul}</h2>
             <p className="text-lg text-muted-foreground">{c.testi_teks}</p>
           </div>
           {/* HP: geser ke samping; layar lebar: berjajar. Screenshot dibuka penuh di tab baru supaya tulisannya terbaca. */}
-          <ul className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+          <ul data-reveal-stagger className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
             {c.testimoni.map((t, i) => (
               <li key={`${t.img}-${i}`} className="w-[78%] shrink-0 snap-center space-y-3 sm:w-[45%] md:w-auto">
                 <a href={t.img} target="_blank" rel="noreferrer" className="block rounded-[1.75rem] bg-foreground p-2 shadow-sm transition hover:-translate-y-1">
@@ -141,9 +141,11 @@ export default async function Home() {
       )}
 
       <section id="tanya-jawab" className="mx-auto max-w-3xl scroll-mt-28 px-4 py-16">
+        <div data-reveal>
         <p className="eyebrow mb-4">{c.faq_label}</p>
         <h2 className="mb-8 text-4xl md:text-5xl">{c.faq_judul}</h2>
-        <div className="divide-y divide-foreground/20 rounded-3xl bg-card">
+        </div>
+        <div data-reveal className="divide-y divide-foreground/20 rounded-3xl bg-card">
           {c.faq.map(({ q, a }) => (
             <details key={q} className="group p-6">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold">
@@ -157,7 +159,7 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="flex flex-col items-start gap-6 rounded-[2rem] bg-band p-10 text-band-foreground md:flex-row md:items-center md:justify-between md:p-14">
+        <div data-reveal="zoom" className="flex flex-col items-start gap-6 rounded-[2rem] bg-band p-10 text-band-foreground md:flex-row md:items-center md:justify-between md:p-14">
           <div className="space-y-3">
             <h2 className="text-4xl italic md:text-5xl">{c.ajakan_judul}</h2>
             <p className="text-lg text-band-muted">{c.ajakan_teks}</p>

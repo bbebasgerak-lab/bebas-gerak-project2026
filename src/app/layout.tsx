@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Anton, Atkinson_Hyperlegible, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { idID } from "@clerk/localizations";
 import { Toaster } from "@/components/ui/sonner";
 import { PixelTracker } from "@/components/pixel-tracker";
+import { REVEAL_BOOT } from "@/components/scroll-reveal";
 import { getContent } from "@/lib/content";
 import "./globals.css";
 
@@ -20,8 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id" className={`${body.variable} ${display.variable} ${code.variable} h-full antialiased`}>
+    <html lang="id" suppressHydrationWarning className={`${body.variable} ${display.variable} ${code.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        {/* Menambah kelas reveal-on di <html> sebelum halaman aktif (karena itu suppressHydrationWarning). */}
+        <Script id="reveal-boot" strategy="beforeInteractive">{REVEAL_BOOT}</Script>
         <ClerkProvider
           localization={idID}
           appearance={{ variables: { colorPrimary: "#131313", fontSize: "1rem", borderRadius: "0.9rem" } }}

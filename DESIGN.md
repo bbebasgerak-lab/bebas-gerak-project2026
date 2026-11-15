@@ -90,7 +90,7 @@ Web harus terasa **enerjik, tegas, dan modern** — seperti majalah olahraga —
 2. **Satu tombol isi-hitam per layar** untuk aksi utama. Aksi lain memakai tombol outline.
 3. **Kontras tinggi.** Teks utama 16:1, teks sekunder ≥ 7.7:1 (AAA).
 4. **Kata, bukan simbol.** Ikon selalu berlabel; tidak ada aksi yang hanya muncul saat hover.
-5. **Tenang meski enerjik.** Tidak ada carousel otomatis atau animasi panjang; `prefers-reduced-motion` dihormati.
+5. **Tenang meski enerjik.** Tidak ada carousel otomatis atau animasi panjang; `prefers-reduced-motion` dihormati. Bagian halaman boleh muncul pelan saat di-scroll (naik 28px + memudar, 0,7 detik, kartu bergantian 120ms) lewat atribut `data-reveal` / `data-reveal-stagger` — lihat `components/scroll-reveal.tsx`.
 6. **Pemaaf.** Konfirmasi sebelum aksi berisiko; pesan error jelas dengan teks, tidak hanya warna.
 
 ## Warna

@@ -132,3 +132,52 @@
     @apply inline-flex items-center rounded-full bg-foreground px-4 py-1 font-mono text-sm font-medium uppercase tracking-wide text-background;
   }
 }
+
+/* ===== Animasi muncul saat di-scroll (components/scroll-reveal.tsx) =====
+   Tenang & singkat (DESIGN.md prinsip 5). Kelas .reveal-on dipasang sebelum halaman tampil,
+   dan TIDAK dipasang kalau pengguna memilih "kurangi gerakan" — semua langsung terlihat. */
+/* Pakai animation (bukan transition) supaya tidak bentrok dengan efek hover kartu. */
+.reveal-on [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+}
+.reveal-on [data-reveal].is-revealed {
+  animation: reveal-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+.reveal-on [data-reveal="zoom"].is-revealed {
+  animation-name: reveal-zoom;
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+@keyframes reveal-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+/* Saat halaman dibuka: judul & foto utama muncul pelan (tanpa menunggu scroll). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-in {
+    animation: hero-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--hero-delay, 0ms);
+  }
+  .hero-photo-in {
+    animation: hero-photo-in 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes hero-photo-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}

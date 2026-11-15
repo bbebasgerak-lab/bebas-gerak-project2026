@@ -44,7 +44,7 @@ export function AppShowcase({ programs, text }: { programs: ShowcaseProgram[]; t
   return (
     <Brand value={{ name: text.name, hero: text.hero }}>
     <section className="overflow-hidden py-16 md:py-20" aria-labelledby="tampilan-judul">
-      <div className="mx-auto max-w-6xl px-4 text-center">
+      <div data-reveal className="mx-auto max-w-6xl px-4 text-center">
         <p className="eyebrow mb-6">{text.label}</p>
         <h2 id="tampilan-judul" className="mx-auto w-fit bg-band px-6 py-4 text-[2.2rem] leading-[1.05] text-band-foreground md:px-10 md:py-6 md:text-6xl">
           {text.title1}

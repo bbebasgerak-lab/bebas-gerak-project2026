@@ -18,7 +18,7 @@ export default async function AboutPage() {
         </div>
         <Link href="/program" className={buttonVariants({ size: "lg" })}>Lihat program</Link>
       </div>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-card lg:sticky lg:top-32 lg:self-start">
+      <div data-reveal="zoom" className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-card lg:sticky lg:top-32 lg:self-start">
         <SiteImage
           src={c.tentang_foto}
           alt={c.tentang_foto_alt}
