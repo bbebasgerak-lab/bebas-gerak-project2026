@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition, type ReactNode } from "react";
 import { toast } from "sonner";
-import { ImageUp, Plus, Trash2 } from "lucide-react";
+import { ImageOff, ImageUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,7 +53,17 @@ async function shrink(file: File) {
   throw new Error("terlalu besar");
 }
 
-export function ImageField({ name, defaultValue, original }: { name: string; defaultValue: string; original: string }) {
+export function ImageField({
+  name,
+  defaultValue,
+  original,
+  resetLabel = "Kembali ke foto awal",
+}: {
+  name: string;
+  defaultValue: string;
+  original: string; // "" = boleh tanpa foto
+  resetLabel?: string;
+}) {
   const [url, setUrl] = useState(defaultValue);
   const [busy, setBusy] = useState(false);
   const picker = useRef<HTMLInputElement>(null);
@@ -68,7 +78,7 @@ export function ImageField({ name, defaultValue, original }: { name: string; def
       if ("error" in r) toast.error(r.error);
       else {
         setUrl(r.url);
-        toast.success("Foto terunggah. Tekan Simpan perubahan untuk memasangnya.");
+        toast.success("Foto terunggah. Tekan tombol simpan di bawah untuk memasangnya.");
       }
     } catch {
       toast.error("Foto tidak bisa dibaca. Coba foto lain (JPG atau PNG).");
@@ -80,17 +90,23 @@ export function ImageField({ name, defaultValue, original }: { name: string; def
 
   return (
     <div className="flex flex-wrap items-center gap-4">
-      {/* eslint-disable-next-line @next/next/no-img-element -- pratinjau kecil di admin, tidak perlu dioptimalkan */}
-      <img src={url} alt="" className="h-28 w-40 rounded-xl border bg-muted object-cover" />
+      {url ? (
+        // eslint-disable-next-line @next/next/no-img-element -- pratinjau kecil di admin, tidak perlu dioptimalkan
+        <img src={url} alt="" className="h-28 w-40 rounded-xl border bg-muted object-cover" />
+      ) : (
+        <span className="flex h-28 w-40 flex-col items-center justify-center gap-1 rounded-xl border border-dashed bg-muted text-sm text-muted-foreground">
+          <ImageOff className="size-6" aria-hidden /> Belum ada foto
+        </span>
+      )}
       <input type="hidden" name={name} value={url} />
       <input ref={picker} type="file" accept="image/*" className="sr-only" tabIndex={-1} aria-hidden onChange={(e) => pick(e.target.files?.[0])} />
       <div className="flex flex-col items-start gap-2">
         <Button type="button" variant="outline" disabled={busy} onClick={() => picker.current?.click()}>
-          <ImageUp aria-hidden /> {busy ? "Mengunggah…" : "Ganti foto"}
+          <ImageUp aria-hidden /> {busy ? "Mengunggah…" : url ? "Ganti foto" : "Pilih foto"}
         </Button>
         {url !== original && (
           <button type="button" className="text-sm text-muted-foreground underline underline-offset-4" onClick={() => setUrl(original)}>
-            Kembali ke foto awal
+            {resetLabel}
           </button>
         )}
       </div>

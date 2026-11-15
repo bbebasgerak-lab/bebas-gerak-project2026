@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ActionForm } from "@/components/action-form";
 import { db, type Program, type Video } from "@/lib/supabase";
 import { videosOf } from "@/lib/data";
+import { getProgramPhotos } from "@/lib/content";
 import { deleteVideo, saveVideo } from "../../actions";
 import { Field, ProgramForm, selectClass } from "../program-form";
 
@@ -15,7 +16,7 @@ export default async function EditProgram({ params }: PageProps<"/admin/program/
   const { id } = await params;
   const { data: program } = await db().from("programs").select("*").eq("id", id).maybeSingle<Program>();
   if (!program) notFound();
-  const videos = await videosOf(program.id);
+  const [videos, photos] = await Promise.all([videosOf(program.id), getProgramPhotos()]);
 
   return (
     <>
@@ -23,7 +24,7 @@ export default async function EditProgram({ params }: PageProps<"/admin/program/
         <ArrowLeft className="size-5" aria-hidden /> Semua program
       </Link>
       <h1 className="text-4xl font-semibold">{program.title}</h1>
-      <ProgramForm program={program} />
+      <ProgramForm program={program} photo={photos[program.id]} />
 
       {program.kind === "program" && (
         <section className="space-y-4">

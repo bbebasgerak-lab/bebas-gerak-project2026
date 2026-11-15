@@ -129,3 +129,11 @@ test("waLink: hanya untuk nomor yang berupa angka", () => {
   assert.equal(waLink("0812-3456"), null);
   assert.match(waLink("6281234567890")!, /^https:\/\/wa\.me\/6281234567890\?text=/);
 });
+
+test("cleanPhotoMap: hanya isi teks yang dipakai", async () => {
+  const { cleanPhotoMap } = await import("./content-fields.ts");
+  assert.deepEqual(cleanPhotoMap({ a: "https://x/1.jpg", b: "", c: 5, d: null }), { a: "https://x/1.jpg" });
+  assert.deepEqual(cleanPhotoMap(null), {});
+  assert.deepEqual(cleanPhotoMap(["x"]), {});
+  assert.deepEqual(cleanPhotoMap("rusak"), {});
+});

@@ -1,12 +1,14 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { clerkClient } from "@clerk/nextjs/server";
 import { requireAdmin } from "@/lib/auth";
 import { db, type Program } from "@/lib/supabase";
 import { grantAccess } from "@/lib/payment";
 import { youtubeId } from "@/lib/youtube";
+import { CONTENT_TAG, PROGRAM_PHOTO_FILE, downloadJson, putJson, storageBase } from "@/lib/content";
+import { cleanPhotoMap, isAllowedImage } from "@/lib/content-fields";
 
 const text = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 const intOrNull = (fd: FormData, k: string) => (text(fd, k) ? Math.round(Number(text(fd, k))) : null);
@@ -14,6 +16,8 @@ const intOrNull = (fd: FormData, k: string) => (text(fd, k) ? Math.round(Number(
 export async function saveProgram(fd: FormData) {
   await requireAdmin();
   const id = text(fd, "id");
+  const photo = text(fd, "photo");
+  if (photo && !isAllowedImage(photo, storageBase())) return { error: "Foto program tidak dikenali. Coba unggah ulang fotonya." };
   const row = {
     slug: text(fd, "slug").toLowerCase(),
     title: text(fd, "title"),
@@ -36,6 +40,18 @@ export async function saveProgram(fd: FormData) {
     ? await supabase.from("programs").update(row).eq("id", id).select("id").single()
     : await supabase.from("programs").insert(row).select("id").single();
   if (error) return { error: error.code === "23505" ? "Alamat halaman sudah dipakai program lain." : error.message };
+
+  // Foto disimpan terpisah dari tabel programs (lihat src/lib/content.ts). Dibaca langsung, bukan dari cache,
+  // supaya foto program lain yang baru diubah tidak tertimpa.
+  const photos = cleanPhotoMap(await downloadJson(PROGRAM_PHOTO_FILE));
+  if ((photos[data.id] ?? "") !== photo) {
+    if (photo) photos[data.id] = photo;
+    else delete photos[data.id];
+    const photoError = await putJson(PROGRAM_PHOTO_FILE, photos);
+    if (photoError) return { error: `Program tersimpan, tapi fotonya gagal disimpan: ${photoError}` };
+    updateTag(CONTENT_TAG);
+  }
+
   revalidatePath("/", "layout");
   if (!id) redirect(`/admin/program/${data.id}`);
 }

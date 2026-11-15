@@ -2,22 +2,8 @@
 
 import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { db } from "@/lib/supabase";
-import { BUCKET, CONTENT_FILE, CONTENT_TAG, storageBase } from "@/lib/content";
+import { CONTENT_FILE, CONTENT_TAG, put, putJson, storageBase } from "@/lib/content";
 import { allFields, isAllowedImage } from "@/lib/content-fields";
-
-type PutOptions = { contentType: string; upsert?: boolean; cacheControl: string };
-
-// Unggah ke Supabase Storage. Bucket dibuat otomatis kalau project Supabase-nya masih baru.
-async function put(path: string, body: Blob | string, options: PutOptions) {
-  const storage = db().storage;
-  let { error } = await storage.from(BUCKET).upload(path, body, options);
-  if (error && /bucket not found/i.test(error.message)) {
-    await storage.createBucket(BUCKET, { public: true });
-    ({ error } = await storage.from(BUCKET).upload(path, body, options));
-  }
-  return error?.message ?? null;
-}
 
 export async function saveContent(fd: FormData) {
   await requireAdmin();
@@ -39,8 +25,7 @@ export async function saveContent(fd: FormData) {
   if (half >= 0) return { error: `Tanya jawab nomor ${half + 1} belum lengkap. Isi pertanyaan dan jawabannya, atau hapus.` };
   if (faq.length) data.faq = faq;
 
-  // cacheControl 0: file ini selalu ditimpa di alamat yang sama, jadi tidak boleh disimpan lama oleh CDN.
-  const error = await put(CONTENT_FILE, JSON.stringify(data, null, 2), { contentType: "application/json", upsert: true, cacheControl: "0" });
+  const error = await putJson(CONTENT_FILE, data);
   if (error) return { error: `Gagal menyimpan: ${error}` };
   updateTag(CONTENT_TAG);
   revalidatePath("/", "layout");

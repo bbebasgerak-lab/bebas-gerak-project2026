@@ -132,6 +132,30 @@ export const groups = [
       alt("tentang_foto_alt", "Seorang bapak lanjut usia berlatih tai chi dengan tenang di taman pada pagi hari"),
     ],
   },
+  {
+    title: "Halaman Kebijakan Privasi",
+    note: "Teks awal hanya contoh. Minta client membaca dan menyesuaikannya sebelum web dipakai untuk jualan.",
+    fields: [
+      t("privasi_judul", "Judul", "Kebijakan Privasi"),
+      t("privasi_tanggal", "Terakhir diperbarui", "15 November 2026"),
+      area("privasi_isi", "Isi", [
+          `Halaman ini menjelaskan data apa yang dikumpulkan ${site.name} saat Anda memakai website ini, untuk apa data itu dipakai, dan bagaimana Anda bisa meminta data Anda dihapus.`,
+          "## Data yang kami kumpulkan",
+          "Saat Anda mendaftar atau masuk, kami menyimpan nama, alamat email, dan foto profil dari akun Google Anda (jika masuk dengan Google). Saat Anda membeli program, kami menyimpan riwayat pesanan: program yang dibeli, jumlah yang dibayar, waktu pembayaran, dan cara pembayaran. Saat Anda berlatih, kami mencatat video mana yang sudah Anda selesaikan.",
+          "Kami tidak pernah melihat atau menyimpan nomor kartu, PIN, atau kata sandi bank Anda. Pembayaran diproses langsung oleh Midtrans.",
+          "## Untuk apa data dipakai",
+          "Data dipakai hanya untuk menjalankan layanan: membuka akses program yang sudah Anda beli, menyimpan kemajuan latihan, mengirim email yang berkaitan dengan akun Anda (misalnya kode masuk atau atur ulang kata sandi), dan membantu Anda saat menghubungi kami. Kami tidak menjual data Anda kepada siapa pun.",
+          "## Layanan pihak ketiga",
+          "Untuk menjalankan website ini kami memakai layanan berikut: Clerk dan Google (masuk akun), Supabase (penyimpanan data), Midtrans (pembayaran), Vercel (server website), dan YouTube (pemutaran video). Masing-masing hanya menerima data yang dibutuhkan untuk tugasnya.",
+          "## Cookie",
+          "Kami memakai cookie agar Anda tetap masuk ke akun selama memakai website. Kami tidak memakai cookie untuk iklan.",
+          "## Menghapus data Anda",
+          "Anda bisa meminta akun dan data Anda dihapus kapan saja dengan menghubungi kami lewat email bbebasgerak@gmail.com atau tombol WhatsApp di bagian bawah halaman. Permintaan akan kami proses paling lambat 14 hari kerja.",
+          "## Perubahan kebijakan",
+          "Kebijakan ini dapat kami perbarui sewaktu-waktu. Tanggal pembaruan terakhir tercantum di bagian atas halaman ini.",
+        ].join("\n\n"), "Kosongkan satu baris untuk paragraf baru. Awali baris dengan ## untuk membuat subjudul."),
+    ],
+  },
 ];
 
 export const faqHeading = {
@@ -168,6 +192,12 @@ export function mergeContent(saved: unknown): Content {
   const faq = Array.isArray(s.faq) ? s.faq.filter(isFaq) : [];
   out.faq = faq.length ? faq : defaultFaq;
   return out;
+}
+
+/** Foto per program: buang isi yang bukan teks. Alamatnya sudah diperiksa saat disimpan. */
+export function cleanPhotoMap(saved: unknown): Record<string, string> {
+  if (typeof saved !== "object" || saved === null || Array.isArray(saved)) return {};
+  return Object.fromEntries(Object.entries(saved).filter(([, v]) => typeof v === "string" && v.trim() !== ""));
 }
 
 /** Foto hanya boleh dari folder bawaan web atau dari penyimpanan foto web ini. Alamat lain ditolak. */

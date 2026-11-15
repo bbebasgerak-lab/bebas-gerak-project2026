@@ -19,6 +19,7 @@ export async function SiteFooter() {
             <Link href="/program" className="underline-offset-4 hover:underline">Semua Program</Link>
             <Link href="/tentang" className="underline-offset-4 hover:underline">Tentang Kami</Link>
             <Link href="/masuk" className="underline-offset-4 hover:underline">Masuk Member</Link>
+            <Link href="/kebijakan-privasi" className="underline-offset-4 hover:underline">Kebijakan Privasi</Link>
           </div>
         </nav>
         <div className="space-y-4 px-4 py-10 md:pl-8">

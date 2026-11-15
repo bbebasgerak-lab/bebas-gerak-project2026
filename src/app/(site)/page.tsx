@@ -8,12 +8,12 @@ import { VideoFrame } from "@/components/video-frame";
 import { AppShowcase } from "@/components/app-showcase";
 import { firstPreview, publishedPrograms, rupiah } from "@/lib/data";
 import { playbackUrl } from "@/lib/video";
-import { getContent } from "@/lib/content";
+import { getContent, getProgramPhotos } from "@/lib/content";
 
 // Semua teks & foto di halaman ini diatur dari Panel Admin → Pengaturan Web (daftarnya di src/lib/content-fields.ts).
 
 export default async function Home() {
-  const [programs, preview, c] = await Promise.all([publishedPrograms(), firstPreview(), getContent()]);
+  const [programs, preview, c, photos] = await Promise.all([publishedPrograms(), firstPreview(), getContent(), getProgramPhotos()]);
 
   return (
     <>
@@ -74,7 +74,7 @@ export default async function Home() {
         </div>
         {programs.length ? (
           <div className="grid gap-8 pt-4 md:grid-cols-3">
-            {programs.map((p) => <ProgramCard key={p.id} program={p} />)}
+            {programs.map((p) => <ProgramCard key={p.id} program={p} photo={photos[p.id]} />)}
           </div>
         ) : (
           <p className="rounded-3xl bg-card p-8 text-center text-lg">Program segera hadir.</p>

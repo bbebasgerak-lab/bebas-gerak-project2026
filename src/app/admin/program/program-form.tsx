@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ActionForm } from "@/components/action-form";
 import type { Program } from "@/lib/supabase";
 import { saveProgram } from "../actions";
+import { ImageField } from "../pengaturan/editors";
 
 export const selectClass = "h-11 w-full rounded-lg border border-input bg-background px-3 text-base";
 
@@ -18,10 +19,15 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
   );
 }
 
-export function ProgramForm({ program }: { program?: Program }) {
+export function ProgramForm({ program, photo = "" }: { program?: Program; photo?: string }) {
   return (
     <ActionForm action={saveProgram} success="Program tersimpan" className="grid gap-5 rounded-2xl border bg-card p-6 md:grid-cols-2">
       {program && <input type="hidden" name="id" value={program.id} />}
+      <div className="md:col-span-2">
+        <Field label="Foto program" hint="Tampil di bagian atas kartu program. Paling bagus foto mendatar (lebar).">
+          <ImageField name="photo" defaultValue={photo} original="" resetLabel="Hapus foto" />
+        </Field>
+      </div>
       <Field label="Judul">
         <Input name="title" defaultValue={program?.title} required className="h-11 text-base" />
       </Field>
