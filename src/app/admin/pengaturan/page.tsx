@@ -3,14 +3,15 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getContent } from "@/lib/content";
-import { faqHeading, groups, type FieldDef } from "@/lib/content-fields";
+import { faqHeading, groups, testiHeading, type FieldDef } from "@/lib/content-fields";
 import { Field } from "../program/program-form";
-import { FaqEditor, ImageField, SettingsForm } from "./editors";
+import { FaqEditor, ImageField, SettingsForm, TestimoniEditor } from "./editors";
 
 export const metadata = { title: "Pengaturan Web" };
 
 const sectionClass = "scroll-mt-6 space-y-5 rounded-2xl border bg-card p-6";
 const FAQ_ID = "bagian-tanya-jawab";
+const TESTI_ID = "bagian-testimoni";
 
 export default async function SettingsPage() {
   const c = await getContent();
@@ -37,7 +38,7 @@ export default async function SettingsPage() {
         </p>
       </div>
       <nav aria-label="Lompat ke bagian" className="flex flex-wrap gap-2">
-        {[...groups.map((g, i) => [`#bagian-${i}`, g.title]), [`#${FAQ_ID}`, "Beranda: tanya jawab"]].map(([href, title]) => (
+        {[...groups.map((g, i) => [`#bagian-${i}`, g.title]), [`#${TESTI_ID}`, "Beranda: testimoni"], [`#${FAQ_ID}`, "Beranda: tanya jawab"]].map(([href, title]) => (
           <a key={href} href={href} className="rounded-full border bg-card px-4 py-2 text-sm font-bold hover:bg-muted">{title}</a>
         ))}
       </nav>
@@ -51,6 +52,14 @@ export default async function SettingsPage() {
             <div className="grid gap-5 md:grid-cols-2">{g.fields.map(text)}</div>
           </section>
         ))}
+        <section id={TESTI_ID} className={sectionClass}>
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold">Beranda: testimoni</h2>
+            <p className="text-muted-foreground">Unggah screenshot pesan dari member. Bisa ditambah atau dihapus. Kalau semua dihapus, bagian testimoni tidak tampil.</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">{[testiHeading.label, testiHeading.judul, testiHeading.teks].map(text)}</div>
+          <TestimoniEditor initial={c.testimoni} />
+        </section>
         <section id={FAQ_ID} className={sectionClass}>
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold">Beranda: tanya jawab</h2>

@@ -137,3 +137,11 @@ test("cleanPhotoMap: hanya isi teks yang dipakai", async () => {
   assert.deepEqual(cleanPhotoMap(["x"]), {});
   assert.deepEqual(cleanPhotoMap("rusak"), {});
 });
+
+test("mergeContent: testimoni awal, bisa dikosongkan, isi rusak dibuang", async () => {
+  const { mergeContent, defaultTestimoni } = await import("./content-fields.ts");
+  assert.deepEqual(mergeContent(null).testimoni, defaultTestimoni);
+  assert.deepEqual(mergeContent({ testimoni: [] }).testimoni, []);
+  const ok = { img: "/images/a.jpg", nama: "A", alt: "isi" };
+  assert.deepEqual(mergeContent({ testimoni: [ok, { img: "", nama: "", alt: "" }, "rusak"] }).testimoni, [ok]);
+});

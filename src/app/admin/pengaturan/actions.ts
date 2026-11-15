@@ -25,6 +25,15 @@ export async function saveContent(fd: FormData) {
   if (half >= 0) return { error: `Tanya jawab nomor ${half + 1} belum lengkap. Isi pertanyaan dan jawabannya, atau hapus.` };
   if (faq.length) data.faq = faq;
 
+  // Testimoni selalu disimpan (boleh kosong = bagian testimoni disembunyikan).
+  const names = fd.getAll("testi_nama").map((v) => String(v).trim());
+  const alts = fd.getAll("testi_alt").map((v) => String(v).replace(/\r\n/g, "\n").trim());
+  const testimoni = fd.getAll("testi_img").map((v, i) => ({ img: String(v).trim(), nama: names[i] ?? "", alt: alts[i] ?? "" }));
+  const noImg = testimoni.findIndex((x) => !x.img);
+  if (noImg >= 0) return { error: `Testimoni nomor ${noImg + 1} belum ada gambarnya. Pilih gambar, atau hapus.` };
+  if (testimoni.some((x) => !isAllowedImage(x.img, storageBase()))) return { error: "Ada gambar testimoni yang tidak dikenali. Coba unggah ulang." };
+  data.testimoni = testimoni;
+
   const error = await putJson(CONTENT_FILE, data);
   if (error) return { error: `Gagal menyimpan: ${error}` };
   updateTag(CONTENT_TAG);

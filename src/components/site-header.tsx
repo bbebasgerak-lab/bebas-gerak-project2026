@@ -22,6 +22,7 @@ export async function SiteHeader() {
         <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap text-base font-bold">
           <Link href="/program" className="hover:text-primary">Program</Link>
           <Link href="/tentang" className="hover:text-primary">Tentang Kami</Link>
+          <Link href="/#testimoni" className="hover:text-primary">Testimoni</Link>
           <Link href="/#tanya-jawab" className="hover:text-primary">Tanya Jawab</Link>
         </nav>
         <div className="flex items-center gap-2">
@@ -44,6 +45,7 @@ export async function SiteHeader() {
       <nav className="lg:hidden flex flex-wrap justify-center gap-x-6 gap-y-1 border-t px-4 py-2 text-base font-bold">
         <Link href="/program">Program</Link>
         <Link href="/tentang">Tentang</Link>
+        <Link href="/#testimoni">Testimoni</Link>
         <Link href="/#tanya-jawab">Tanya Jawab</Link>
       </nav>
     </header>

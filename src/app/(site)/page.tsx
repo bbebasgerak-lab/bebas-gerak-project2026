@@ -117,6 +117,29 @@ export default async function Home() {
         </section>
       )}
 
+      {c.testimoni.length > 0 && (
+        <section id="testimoni" className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16">
+          <div className="mb-10 max-w-2xl space-y-4">
+            <p className="eyebrow">{c.testi_label}</p>
+            <h2 className="text-4xl md:text-5xl">{c.testi_judul}</h2>
+            <p className="text-lg text-muted-foreground">{c.testi_teks}</p>
+          </div>
+          {/* HP: geser ke samping; layar lebar: berjajar. Screenshot dibuka penuh di tab baru supaya tulisannya terbaca. */}
+          <ul className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+            {c.testimoni.map((t, i) => (
+              <li key={`${t.img}-${i}`} className="w-[78%] shrink-0 snap-center space-y-3 sm:w-[45%] md:w-auto">
+                <a href={t.img} target="_blank" rel="noreferrer" className="block rounded-[1.75rem] bg-foreground p-2 shadow-sm transition hover:-translate-y-1">
+                  <span className="relative block aspect-[591/1280] overflow-hidden rounded-[1.4rem] bg-card">
+                    <SiteImage src={t.img} alt={t.alt || `Testimoni ${t.nama}`} fill sizes="(min-width: 768px) 33vw, 80vw" className="object-cover object-top" />
+                  </span>
+                </a>
+                {t.nama && <p className="text-center font-bold">{t.nama}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section id="tanya-jawab" className="mx-auto max-w-3xl scroll-mt-28 px-4 py-16">
         <p className="eyebrow mb-4">{c.faq_label}</p>
         <h2 className="mb-8 text-4xl md:text-5xl">{c.faq_judul}</h2>

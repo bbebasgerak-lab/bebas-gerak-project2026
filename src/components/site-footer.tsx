@@ -10,7 +10,7 @@ export async function SiteFooter() {
     <footer className="mt-auto border-t">
       <div className="mx-auto grid max-w-6xl md:grid-cols-3 md:divide-x">
         <div className="space-y-4 border-b px-4 py-10 md:border-b-0 md:pr-8">
-          <Logo />
+          <Logo className="h-20 sm:h-24" />
           <p className="text-muted-foreground">{c.tagline.replace(/\.$/, "")}.</p>
         </div>
         <nav className="space-y-4 border-b px-4 py-10 md:border-b-0 md:px-8" aria-label="Navigasi footer">

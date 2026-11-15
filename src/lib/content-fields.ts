@@ -22,6 +22,7 @@ export const groups = [
     note: "Dipakai di semua halaman.",
     fields: [
       t("nama", "Nama web", site.name),
+      img("logo", "Logo", "/images/logo.png", "Paling bagus PNG berlatar transparan. Tampil di bagian atas dan bawah halaman."),
       t("judul_tab", "Judul di tab browser & Google", "Senam Kursi untuk Lansia", "Tampil setelah nama web."),
       t("tagline", "Kalimat singkat tentang web", site.tagline, "Tampil di bagian bawah halaman dan di hasil pencarian Google."),
       t("whatsapp", "Nomor WhatsApp bantuan", site.whatsapp, "Angka saja, diawali 62. Contoh: 6281234567890"),
@@ -163,6 +164,32 @@ export const faqHeading = {
   judul: t("faq_judul", "Judul", "Yang sering ditanyakan"),
 };
 
+export const testiHeading = {
+  label: t("testi_label", "Label kecil", "Kata member"),
+  judul: t("testi_judul", "Judul", "Mereka sudah merasakannya"),
+  teks: t("testi_teks", "Kalimat di bawah judul", "Pesan asli dari member kami. Ketuk gambar untuk memperbesar."),
+};
+
+// Testimoni = screenshot pesan asli dari member. `alt` = isi pesannya, dibacakan untuk pengunjung yang penglihatannya lemah.
+export type Testimoni = { img: string; nama: string; alt: string };
+export const defaultTestimoni: Testimoni[] = [
+  {
+    img: "/images/testimoni-1.jpg",
+    nama: "Renita, member",
+    alt: "Pesan dari Renita: awalnya ragu dan takut latihan di gym, tapi bersama Coach Gilang olahraga jadi menyenangkan. Latihannya santai tapi serius soal teknik dan form yang benar, slow but sure.",
+  },
+  {
+    img: "/images/testimoni-2.jpg",
+    nama: "Renita, member (lanjutan)",
+    alt: "Lanjutan pesan Renita: selalu ada kreativitas dan target baru yang bikin termotivasi. Bersyukur dipertemukan dengan Coach Gilang, bukan cuma belajar olahraga dengan benar tapi juga membangun kebiasaan baik.",
+  },
+  {
+    img: "/images/testimoni-3.jpg",
+    nama: "Evi, member 4 tahun",
+    alt: "Pesan dari Evi: latihan aman, tidak ada kendala. Badan sudah beradaptasi, otot lebih kencang dan kuat setelah 4 tahun latihan. Semoga kalau sudah lansia masih bisa lincah. Terima kasih sudah menyemangati, programnya mantap.",
+  },
+];
+
 export type Faq = { q: string; a: string };
 export const defaultFaq: Faq[] = [
   { q: "Apakah aman untuk lutut dan punggung?", a: "Hampir semua gerakan dilakukan sambil duduk atau berpegangan pada kursi. Ada pilihan gerakan lebih ringan di setiap video. Jika punya kondisi kesehatan khusus, konsultasikan dulu dengan dokter." },
@@ -173,10 +200,20 @@ export const defaultFaq: Faq[] = [
   { q: "Kalau bingung, bisa minta bantuan?", a: "Tentu. Tekan tombol WhatsApp di bagian bawah halaman, tim kami siap membantu." },
 ];
 
-export type ContentKey = (typeof groups)[number]["fields"][number]["key"] | "faq_label" | "faq_judul";
+export type ContentKey =
+  | (typeof groups)[number]["fields"][number]["key"]
+  | "faq_label" | "faq_judul" | "testi_label" | "testi_judul" | "testi_teks";
 export type FieldDef = { key: ContentKey; label: string; def: string; kind: Kind; hint?: string };
-export const allFields: FieldDef[] = [...groups.flatMap((g) => g.fields as FieldDef[]), faqHeading.label, faqHeading.judul];
-export type Content = Record<ContentKey, string> & { faq: Faq[] };
+export const allFields: FieldDef[] = [
+  ...groups.flatMap((g) => g.fields as FieldDef[]),
+  faqHeading.label, faqHeading.judul,
+  testiHeading.label, testiHeading.judul, testiHeading.teks,
+];
+export type Content = Record<ContentKey, string> & { faq: Faq[]; testimoni: Testimoni[] };
+
+const isTesti = (x: unknown): x is Testimoni =>
+  typeof x === "object" && x !== null && typeof (x as Testimoni).img === "string" && Boolean((x as Testimoni).img.trim()) &&
+  typeof (x as Testimoni).nama === "string" && typeof (x as Testimoni).alt === "string";
 
 const isFaq = (x: unknown): x is Faq =>
   typeof x === "object" && x !== null && typeof (x as Faq).q === "string" && typeof (x as Faq).a === "string" && Boolean((x as Faq).q.trim() && (x as Faq).a.trim());
@@ -191,6 +228,8 @@ export function mergeContent(saved: unknown): Content {
   }
   const faq = Array.isArray(s.faq) ? s.faq.filter(isFaq) : [];
   out.faq = faq.length ? faq : defaultFaq;
+  // Beda dengan tanya jawab: kalau admin sengaja menghapus semua testimoni, bagiannya disembunyikan.
+  out.testimoni = Array.isArray(s.testimoni) ? s.testimoni.filter(isTesti) : defaultTestimoni;
   return out;
 }
 

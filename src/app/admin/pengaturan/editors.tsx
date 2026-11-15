@@ -6,7 +6,7 @@ import { ImageOff, ImageUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { Faq } from "@/lib/content-fields";
+import type { Faq, Testimoni } from "@/lib/content-fields";
 import { saveContent, uploadImage } from "./actions";
 
 // Tidak memakai <form action>: React mengosongkan ulang form setelah action selesai, jadi kalau ada satu
@@ -110,6 +110,33 @@ export function ImageField({
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+export function TestimoniEditor({ initial }: { initial: Testimoni[] }) {
+  const nextId = useRef(initial.length);
+  const [rows, setRows] = useState(() => initial.map((t, id) => ({ id, ...t })));
+  return (
+    <div className="space-y-4">
+      {rows.length === 0 && <p className="text-muted-foreground">Belum ada testimoni. Bagian testimoni tidak tampil di website.</p>}
+      {rows.map((row, i) => (
+        <div key={row.id} className="space-y-3 rounded-xl border p-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-bold">Testimoni {i + 1}</p>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setRows(rows.filter((r) => r.id !== row.id))}>
+              <Trash2 aria-hidden /> Hapus
+            </Button>
+          </div>
+          <ImageField name="testi_img" defaultValue={row.img} original="" resetLabel="Kosongkan gambar" />
+          <Input name="testi_nama" defaultValue={row.nama} placeholder="Nama, contoh: Evi, member 4 tahun" aria-label={`Nama testimoni ${i + 1}`} className="h-11 text-base" />
+          <Textarea name="testi_alt" defaultValue={row.alt} placeholder="Tulis ulang isi pesannya secara singkat" aria-label={`Isi pesan testimoni ${i + 1}`} rows={3} className="text-base" />
+          <p className="text-sm text-muted-foreground">Isi pesan dibacakan untuk pengunjung yang penglihatannya lemah.</p>
+        </div>
+      ))}
+      <Button type="button" variant="outline" onClick={() => setRows([...rows, { id: nextId.current++, img: "", nama: "", alt: "" }])}>
+        <Plus aria-hidden /> Tambah testimoni
+      </Button>
     </div>
   );
 }
