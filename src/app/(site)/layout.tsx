@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { SmoothScroll } from "@/components/smooth-scroll";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -16,6 +17,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <main className="flex-1">{children}</main>
       <SiteFooter />
       <ScrollReveal />
+      <SmoothScroll />
     </>
   );
 }
