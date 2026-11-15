@@ -3,6 +3,9 @@ import { computeExpiry } from "./access";
 import { paymentOutcome, verifySignature, type MidtransNotification } from "./midtrans-core";
 
 const SERVER_KEY = () => process.env.MIDTRANS_SERVER_KEY!;
+// Dashboard Midtrans baru memisahkan kunci: server key (bisa banyak, untuk memanggil API) dan
+// Signature Secret Key (satu, untuk tanda tangan notifikasi). Akun lama memakai server key untuk keduanya.
+const SIGNATURE_KEY = () => process.env.MIDTRANS_SIGNATURE_KEY || SERVER_KEY();
 const PROD = () => process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === "true";
 const authHeader = () => "Basic " + Buffer.from(SERVER_KEY() + ":").toString("base64");
 
@@ -36,7 +39,7 @@ export async function fetchStatus(orderId: string): Promise<MidtransNotification
  * Aman dipanggil berkali-kali untuk pesanan yang sama.
  */
 export async function applyPayment(n: MidtransNotification) {
-  if (!verifySignature(n, SERVER_KEY())) return { ok: false, reason: "bad signature" } as const;
+  if (!verifySignature(n, SIGNATURE_KEY())) return { ok: false, reason: "bad signature" } as const;
 
   const supabase = db();
   const { data: order } = await supabase.from("orders").select("*, programs(*)").eq("id", n.order_id!).maybeSingle();
