@@ -24,8 +24,10 @@ export default async function MyTraining({ searchParams }: PageProps<"/latihan">
   const viewer = await requireUser();
   if (!dbReady()) return <p className="p-10 text-center">Database belum diatur.</p>;
 
-  const { order } = await searchParams;
-  const status = typeof order === "string" ? await orderStatus(order, viewer.id) : null;
+  // ?order= dari pop-up pembayaran di web; ?order_id= dari Finish Redirect URL Midtrans (mis. setelah bayar di aplikasi GoPay).
+  const { order, order_id } = await searchParams;
+  const orderId = typeof order === "string" ? order : typeof order_id === "string" ? order_id : null;
+  const status = orderId ? await orderStatus(orderId, viewer.id) : null;
 
   const now = new Date();
   const [rows, programs] = await Promise.all([accessRows(viewer.id), publishedPrograms()]);
